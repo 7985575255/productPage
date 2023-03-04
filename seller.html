@@ -12,17 +12,26 @@
     <input type="text" id="product">
     <label for="">Prise</label>
     <input type="number" id="price">
-    <button type="submit" id="submit">Submit</button>
+    <label>Category</label>
+    <select id="option">
+        <option value="food">Food</option>
+        <option value="electronic">Electronic</option>
+        <option value="Medicine">Medicine</option>
+      </select>
+    <button type="submit" id="submit">Add Item</button>
   <br><br>
-  <h2>Product All</h2>
 
-  <div id="allUserData"></div>
+  
+  <h2 id="food">Food Item</h2>
+  <h2 id="electronic">Electronic</h2>
+  <h2 id="medicine">Medicine</h2> 
   <br> 
-  <h2> Total Price-:</h2>
-  <div id="total"></div>
+ <h2>Total price-:</h2>
+ <h2 id="totalPrice"></h2>
+  
     <script src="seller.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://crudcrud.com/api/6ccc4babcd6343eb8d47def935128bb1/userDeatils"></script>
+    <script src="https://crudcrud.com/api/43d8c7d4a60b43b099859bc2b0a34d70/userDeatils"></script>
 
 </body>
 </html>

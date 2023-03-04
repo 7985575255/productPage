@@ -1,66 +1,112 @@
 
-
 var submit = document.getElementById('submit');
+var total=document.getElementById('totalPrice');
+var rate=0;
 submit.addEventListener('click', (e) => {
     e.preventDefault();
-    var product = document.getElementById('product').value;
-    var price = document.getElementById('price').value;
-    var obj = { product, price };
-
-    //post data in backend
-    function postData() {
-        axios.post('https://crudcrud.com/api/6ccc4babcd6343eb8d47def935128bb1/userDeatils', obj
-        ).then((res) => {
-            showUserDataOnScreen(res.data)
-        }).catch((err) => {
-            console.log(err)
-        })
-    }
-    postData();
-})
-//show data on screen
-function showUserDataOnScreen(user) {
-
-    document.getElementById('product').value = '';
-    document.getElementById('price').value = '';
-
-    let parent = document.getElementById('allUserData')
-    let childhtml = `<li id=${user._id}>${user.product}-${user.price}
-    <button onclick= deleteUser('${user._id}')>Delete user
-     <button onclick= editUser('${user.product}','${user.price}','${user._id}')>Edit user</li>`
-    parent.innerHTML = parent.innerHTML + childhtml;
-}
-// Edit user funcnilty
-function editUser(product, price, user_id) {
-    console.log('this edit function is working')
-    document.getElementById('product').value = product;
-    document.getElementById('price').value = price;
-    deleteUser(user_id)
-}
-//delete userfuncton
-
-function deleteUser(user_id) {
-    axios.delete(`https://crudcrud.com/api/6ccc4babcd6343eb8d47def935128bb1/userDeatils/${user_id}`).then((res) => {
-        console.log(res);
-        removeUserFromScreen(user_id);
-    }).catch((err) => {
-        console.log(err);
-    })
-}
-function removeUserFromScreen(user_id) {
-    let parent = document.getElementById('allUserData');
-    let child = document.getElementById(user_id);
-    parent.removeChild(child);
-}
-/// show data when page is refresh
-window.addEventListener('DOMContentLoaded', () => {
-    axios.get('https://crudcrud.com/api/6ccc4babcd6343eb8d47def935128bb1/userDeatils').then((response) => {
-
-        for (var i = 0; i < response.data.length; i++) {
-            showUserDataOnScreen(response.data[ i ]);
-        }
-
-    }).catch((err) => {
+    try {
+        var product = document.getElementById('product').value;
+        var price = document.getElementById('price').value;
+        var option = document.getElementById('option').value;
+        var obj = { option, product, price };
+        postData(obj);
+        
+    } catch (err) {
         console.log(err)
-    })
+    }
 })
+
+
+//post data in backend
+async function postData(obj) {
+    try {
+       axios.post('https://crudcrud.com/api/43d8c7d4a60b43b099859bc2b0a34d70/userDeatils', obj
+        ).then((res) => {
+            showUserDataOnScreen(res.data);
+            
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//show data on screen
+async function showUserDataOnScreen(user) {
+    try {
+        let fo = document.getElementById('food');
+        let elec = document.getElementById('electronic');
+        let med = document.getElementById('medicine')
+        document.getElementById('product').value = '';
+        document.getElementById('price').value = '';
+        rate +=parseInt(user.price);
+        total.textContent=rate;
+    
+        if (user.option === 'food') {
+            let childhtml = `<li id=${user._id}>${user.product}-${user.price}-${user.option}
+            <button onclick= deleteUser('${user._id}','${user.price}','${user.option}')>Delete Item</li>`
+            fo.innerHTML = fo.innerHTML + childhtml;
+
+        } else if (user.option === 'electronic') {
+            let childhtml = `<li id=${user._id}>${user.product}-${user.price}-${user.option}
+         <button onclick= deleteUser('${user._id}','${user.price}','${user.option}')>Delete Item</li>`
+             elec.innerHTML = elec.innerHTML + childhtml;
+
+         } else if(user.option==='Medicine') {
+             let childhtml = `<li id=${user._id}>${user.product}-${user.price}-${user.option}
+         <button onclick= deleteUser('${user._id}','${user.price}','${user.option}')>Delete Item</li>`
+             med.innerHTML = med.innerHTML + childhtml;            
+        }
+        
+     } catch (error) {
+        console.log(error)
+    }
+
+}
+
+//delete userfuncton
+async function deleteUser(user_id, price,option) {
+    try {
+     const del= await axios.delete(`https://crudcrud.com/api/43d8c7d4a60b43b099859bc2b0a34d70/userDeatils/${user_id}`).then((del) => {
+            removeUserFromScreen(user_id,price,option);
+        })
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+async function removeUserFromScreen(user_id,price,option) {
+    try {
+        let child = document.getElementById(user_id);
+        let foo = document.getElementById('food');
+        let elec = document.getElementById('electronic');
+        let med = document.getElementById('medicine');
+        
+         if(option==='food'){
+         foo.removeChild(child);
+        }else if(option==='electronic'){
+            elec.removeChild(child);
+        }else if(option==='Medicine'){
+            med.removeChild(child);
+         }
+         rate -=parseInt(price);
+         total.textContent=rate;
+        } catch (error) {
+        console.log('This removeUserFromScreen is not working');
+    }
+}
+
+/// show data when page is refresh
+ window.addEventListener('DOMContentLoaded', () => {
+    try {
+     axios.get('https://crudcrud.com/api/43d8c7d4a60b43b099859bc2b0a34d70/userDeatils').then((response) => {
+            for (var i = 0; i < response.data.length; i++) {
+                showUserDataOnScreen(response.data[ i ]);
+            }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
